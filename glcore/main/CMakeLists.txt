@@ -1,5 +1,3 @@
-find_package(spdlog)
-
 add_executable(main
         ${THIRD_PARTY_DIRECTORY}/glad/glad.c
 
@@ -11,7 +9,6 @@ add_executable(main
         ${THIRD_PARTY_DIRECTORY}/imgui/backends/imgui_impl_glfw.cpp
         ${THIRD_PARTY_DIRECTORY}/imgui/backends/imgui_impl_opengl3.cpp
 
-        ../core/log.cpp
         ../core/window.cpp
         ../core/linux_window.cpp
         ../core/application.cpp
@@ -34,7 +31,7 @@ add_executable(main
 
         main.cpp)
 target_include_directories(main PRIVATE ${THIRD_PARTY_DIRECTORY}/imgui)
-target_link_libraries(main PRIVATE spdlog::spdlog glfw)
+target_link_libraries(main PRIVATE glfw)
 
 add_library(glcore
         ${THIRD_PARTY_DIRECTORY}/glad/glad.c
@@ -47,7 +44,6 @@ add_library(glcore
         ${THIRD_PARTY_DIRECTORY}/imgui/backends/imgui_impl_glfw.cpp
         ${THIRD_PARTY_DIRECTORY}/imgui/backends/imgui_impl_opengl3.cpp
 
-        ../core/log.cpp
         ../core/window.cpp
         ../core/linux_window.cpp
         ../core/application.cpp
@@ -66,4 +62,4 @@ add_library(glcore
 
         ../imgui/imgui_layer.cpp)
 target_include_directories(glcore PRIVATE ${THIRD_PARTY_DIRECTORY}/imgui)
-target_link_libraries(glcore PRIVATE spdlog::spdlog glfw)
+target_link_libraries(glcore PRIVATE glfw)

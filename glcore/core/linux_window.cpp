@@ -4,10 +4,11 @@
 
 #include <glcore/core/linux_window.hpp>
 
+#include <iostream>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include <glcore/core/log.hpp>
 #include <glcore/events/application_event.hpp>
 #include <glcore/events/key_event.hpp>
 #include <glcore/events/mouse_event.hpp>
@@ -17,24 +18,19 @@ namespace glcore {
 static int window_count = 0;
 
 LinuxWindow::LinuxWindow(const WindowProps& props){
-    LOG_CORE_INFO("Creating window_ {0} ({1}, {2})", props.title, props.width, props.height);
     data_.title = props.title;
     data_.width = props.width;
     data_.height = props.height;
 
     if(window_count == 0){
         if(glfwInit() == GLFW_FALSE) {
-            LOG_CORE_CRITICAL("failed to initialized glfw");
-        } else {
-            LOG_CORE_TRACE("glfwInit");
+            std::cerr << "failed to initialized glfw";
         }
     }
 
     window_ = glfwCreateWindow(data_.width, data_.height, data_.title.c_str(), nullptr, nullptr);
-    if(window_ == nullptr){
-        LOG_CORE_CRITICAL("failed to create GLFW window_");
-    } else {
-        LOG_CORE_TRACE("glfwCreateWindow");
+    if(window_ == nullptr) {
+        std::cerr << "failed to create GLFW window";
     }
     ++window_count;
 
@@ -44,15 +40,8 @@ LinuxWindow::LinuxWindow(const WindowProps& props){
     });
 
     if (!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)) {
-        LOG_CORE_CRITICAL("failed to initialize GLAD");
-    } else {
-        LOG_CORE_TRACE("gladLoadGLLoader");
+        std::cerr << "failed to initialize GLAD";
     }
-
-    LOG_CORE_INFO("OpenGL Info:");
-    LOG_CORE_INFO("  Vendor: {0}", glGetString(GL_VENDOR));
-    LOG_CORE_INFO("  Renderer: {0}", glGetString(GL_RENDERER));
-    LOG_CORE_INFO("  Version: {0}", glGetString(GL_VERSION));
 
     glfwSetWindowUserPointer(window_, &data_);
     SetVSync(true);

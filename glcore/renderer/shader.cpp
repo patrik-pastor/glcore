@@ -4,12 +4,11 @@
 
 #include <glcore/renderer/shader.hpp>
 
+#include <iostream>
 #include <fstream>
 #include <sstream>
 
 #include <glad/glad.h>
-
-#include <glcore/core/log.hpp>
 
 namespace glcore {
 
@@ -20,13 +19,13 @@ void Shader::CheckCompileErrors(uint32_t shader_id, const std::string& type, con
         glGetShaderiv(shader_id, GL_COMPILE_STATUS, &success);
         if (!success) {
             glGetShaderInfoLog(shader_id, 1024, nullptr, infoLog);
-            LOG_CORE_ERROR("ERROR::SHADER::COMPILATION_ERROR of type: {0}\n{1}filepath: {2}", type, infoLog, filepath);
+            std::cerr << "ERROR::SHADER::COMPILATION_ERROR of type: " << type << '\n' << infoLog << "filepath: " << filepath;
         }
     } else {
         glGetProgramiv(shader_id, GL_LINK_STATUS, &success);
         if (!success) {
             glGetProgramInfoLog(shader_id, 1024, nullptr, infoLog);
-            LOG_CORE_ERROR("ERROR::PROGRAM_LINKING_ERROR of type: {0}\n{1}filepath: {2}", type, infoLog, filepath);
+            std::cerr << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << '\n' << infoLog << "filepath: " << filepath;
         }
     }
 }
@@ -47,11 +46,11 @@ Shader::Shader(const std::string& filepath) {
             } else if (line.find("fragment") != std::string::npos) {
                 type = ShaderType::FRAGMENT;
             } else {
-                LOG_CORE_WARN("Unknown shader: {0}", line);
+                std::cerr << "Unknown shader: " << line;
             }
         } else {
             if (type == ShaderType::NONE) {
-                LOG_CORE_ERROR("No shader defined");
+                std::cerr << "No shader defined";
             } else {
                 ss[(int) type] << line << '\n';
             }
@@ -80,7 +79,6 @@ Shader::Shader(const std::string& filepath) {
     glAttachShader(id_, fragment_id);
     glLinkProgram(id_);
     CheckCompileErrors(id_, "PROGRAM", filepath);
-    LOG_CORE_TRACE("Shader linked successfully");
     // 2.4 delete the shaders as they're linked into program and no longer necessary
     glDeleteShader(vertex_id);
     glDeleteShader(fragment_id);

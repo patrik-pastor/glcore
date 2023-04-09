@@ -4,19 +4,17 @@
 
 #include <glcore/core/application.hpp>
 
-#include <GLFW/glfw3.h>
+#include <iostream>
 
-#include <glcore/core/log.hpp>
+#include <GLFW/glfw3.h>
 
 namespace glcore {
 
 Application *Application::application_instance_ = nullptr;
 
 Application::Application() {
-    INIT_LOG();
-
     if (application_instance_ != nullptr) {
-        LOG_CORE_CRITICAL("Application already exists!");
+        std::cerr << "Application already exists!";
     }
     application_instance_ = this;
 
@@ -47,7 +45,6 @@ void Application::Run() {
 }
 
 void Application::OnEvent(Event& e) {
-    LOG_CORE_INFO(e.ToString());
     EventDispatcher dispatcher(e);
     dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
 
