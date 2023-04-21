@@ -25,6 +25,8 @@ add_executable(main
         ../renderer/orthographic_camera_controller.cpp
         ../renderer/shader.cpp
 
+        ../utils/random.cpp
+
         ../imgui/imgui_layer.cpp
 
         example_layers/first_example.cpp
@@ -59,6 +61,8 @@ add_library(glcore
         ../renderer/orthographic_camera.cpp
         ../renderer/orthographic_camera_controller.cpp
         ../renderer/shader.cpp
+
+        ../utils/random.cpp
 
         ../imgui/imgui_layer.cpp)
 target_include_directories(glcore PRIVATE ${THIRD_PARTY_DIRECTORY}/imgui)
